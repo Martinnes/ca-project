@@ -30,8 +30,8 @@ workflows:
   do_stuff:
     jobs:
       - test
-      - build:
-          dockerize : 
+      - dockerize:
+           requires:
             - test
           
 #dest is prefix added to artifact paths in artifacts api default: dir of file specified in path

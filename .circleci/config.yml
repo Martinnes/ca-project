@@ -11,6 +11,18 @@ jobs:
       - run :
           name : run tests
           command : python tests.py
+  dockerize:
+    machine: true
+    steps:
+    - checkout
+    # Login to docker
+    - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+    # build the application image
+    - run: docker build -t martinnes/app:$CIRCLE_SHA1 .
+
+    # deploy the image
+    - run: docker push martinnes/app:$CIRCLE_SHA1
 
 #we need either to specify worksflows or it will only run job called build
 workflows:
@@ -18,6 +30,9 @@ workflows:
   do_stuff:
     jobs:
       - test
+      - build:
+          requires : 
+            - test
           
 #dest is prefix added to artifact paths in artifacts api default: dir of file specified in path
 
